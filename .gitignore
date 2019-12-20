@@ -1,0 +1,7 @@
+*.pem
+*.wasm
+*.exe
+*.js
+/demo/client/client
+/demo/server/server
+
