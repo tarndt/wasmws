@@ -7,9 +7,9 @@
 1. In general, many internet ingress paths are not [HTTP/2](https://en.wikipedia.org/wiki/HTTP/2) end to end (gRPC uses HTTP/2). In particular, most CDN vendors do not support HTTP/2 back-haul to origin (ex. [Cloudflare](https://support.cloudflare.com/hc/en-us/articles/214534978-Are-the-HTTP-2-or-SPDY-protocols-supported-between-Cloudflare-and-the-origin-server-)).
 2. Browser WASM applications cannot use [grpc-go](https://github.com/grpc/grpc-go) do the low level networking that go-grpc requires for native operation. (ex. ``dial tcp: Protocol not available`` fun...)
 
-### Aproach taken
+This library allows you to use a websocket as [net.Conn](https://golang.org/pkg/net/#Conn) for arbitrary traffic, this includes running protocols like HTTP, gRPC or any other TCP protocol over it). This is most useful for protocols that are not normally exposed to client side web applications. In our examples we will focus on gRPC since that was my use-case. 
 
-This library allows you to use a websocket as [net.Conn](https://golang.org/pkg/net/#Conn) for arbitrary traffic, this includes running protocols like HTTP, gRPC or any other TCP protocol over it). This is most useful for protocols that are not normally exposed to client side web applications. In our examples we will focus on gRPC. 
+### Aproach taken
 
 #### Client-side (Go WASM application running in browser)
 wasmws provides Go WASM specific [net.Conn](https://golang.org/pkg/net/#Conn) implementation that is backed by [a browser native websocket](https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API):
