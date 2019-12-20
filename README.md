@@ -9,6 +9,8 @@
 
 ### Aproach taken
 
+This library allows you to use a websocket as [net.Conn](https://golang.org/pkg/net/#Conn) for arbitrary traffic, this includes running protocols like HTTP, gRPC or any other TCP protocol over it). This is most useful for protocols that are not normally exposed to client side web applications. In our examples we will focus on gRPC. 
+
 #### Client-side (Go WASM application running in browser)
 wasmws provides Go WASM specific [net.Conn](https://golang.org/pkg/net/#Conn) implementation that is backed by [a browser native websocket](https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API):
 ```
@@ -29,8 +31,12 @@ router.HandleFunc("/grpc-proxy", wsl.HTTPAccept)
 And a network listener to provide net.Conns to network oriented servers:
 ```
 err := grpcServer.Serve(wsl)
-```	
+```
 See the [demo server](https://github.com/tarndt/wasmws/blob/master/demo/server/main.go) for an extended example. If you need more server-side helpers checkout [nhooyr.io/websocket](https://github.com/nhooyr/websocket) which these helpers use themselves.
+
+#### Security
+
+If you use a secure websocket and gRPC or HTTPS this means you get double TLS (once using the browser's TLS stack and once uses Go's). Unless the extra defense in depth is desirable, you may want to use a unsecured websocket.
 
 ## Performance
 
