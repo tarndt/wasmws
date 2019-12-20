@@ -5,7 +5,7 @@
 [wasmws](https://github.com/tarndt/wasmws) was written primarily to allow [Go](https://golang.org/) applications targeting [WASM](https://en.wikipedia.org/wiki/WebAssembly) to communicate with a [gRPC](https://grpc.io/) server. This is normally challenging for two reasons: 
 
 1. In general, many internet ingress paths are not [HTTP/2](https://en.wikipedia.org/wiki/HTTP/2) end to end (gRPC uses HTTP/2). In particular, most CDN vendors do not support HTTP/2 back-haul to origin (ex. [Cloudflare](https://support.cloudflare.com/hc/en-us/articles/214534978-Are-the-HTTP-2-or-SPDY-protocols-supported-between-Cloudflare-and-the-origin-server-)).
-2. Browser WASM applications cannot do the low level networking that "go-grpc" requires for native operation. (ex. ``dial tcp: Protocol not available``)
+2. Browser WASM applications cannot use [grpc-go](https://github.com/grpc/grpc-go) do the low level networking that go-grpc requires for native operation. (ex. ``dial tcp: Protocol not available`` fun...)
 
 ### Aproach taken
 
