@@ -48,6 +48,8 @@ func (wsl *WebSockListener) HTTPAccept(wtr http.ResponseWriter, req *http.Reques
 	case <-wsl.ctx.Done():
 		http.Error(wtr, "503: Service is shutdown", http.StatusServiceUnavailable)
 		log.Printf("WebSockListener: WARN: A websocket listener's HTTP Accept was called when shutdown!")
+		return
+	default:
 	}
 
 	ws, err := websocket.Accept(wtr, req, nil)
