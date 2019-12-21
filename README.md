@@ -36,11 +36,11 @@ See the [demo server](https://github.com/tarndt/wasmws/blob/master/demo/server/m
 
 #### Security
 
-If you use a secure websocket and gRPC or HTTPS this means you get double TLS (once using the browser's TLS stack and once uses Go's). Unless the extra defense in depth is desirable, you may want to use a unsecured websocket.
+If you use a secure websocket and gRPC or HTTPS this means you get double TLS (once using the browser's TLS stack and once again using Go's). Unless the extra defense in depth is desirable, you may want to consider using an unsecured websocket.
 
 ## Performance
 
-Due to challenges around having the sever run as a native application and the client running in a browser, I have not yet added unit benches... or tests :( yet. However, running the demo which performs 8192 gRPC hello world calls provides an idea of library's performance:
+Due to challenges around having the sever running as a native application and the client running in a browser coordinate, I have not yet added unit benches... or tests :( yet. However, running the demo which performs 8192 gRPC hello world calls provides an idea of the library's performance:
 
 Median of 6 runs:
 
@@ -49,7 +49,7 @@ Median of 6 runs:
  * 	Chrome Version 79.0.3945.88 (Official Build) (64-bit) on Linux:
      * ``SUCCESS running 8192 transactions! (average 475.485µs per operation)``
 
-This implementation tries to be intelligent about managing buffers (via [pooling](https://golang.org/pkg/sync/#Pool)) and switch from JavaScript [ArrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer) and streaming [Blob](https://developer.mozilla.org/en-US/docs/Web/API/Blob) based websocket reading based the size of the chunks/messages being received.
+This implementation tries to be intelligent about managing buffers (via [pooling](https://golang.org/pkg/sync/#Pool)) and switches on the fly between JavaScript [ArrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer) and streaming [Blob](https://developer.mozilla.org/en-US/docs/Web/API/Blob) based websocket read interfaces based the size of the chunks/messages being received. Web browsers which do not support [Blob stream](https://developer.mozilla.org/en-US/docs/Web/API/Blob/stream) and [Blob arrayBuffer](https://developer.mozilla.org/en-US/docs/Web/API/Blob/arrayBuffer) methods, such as Microsoft Edge, always use ArrayBuffer-based message consumption.
 
 The test results above are from tests run on a local development workstation:
 
@@ -61,14 +61,14 @@ The test results above are from tests run on a local development workstation:
 If you do not have Go installed, you will of course need to [install it](https://golang.org/doc/install).
 
 1. Checkout repo: ``git clone https://github.com/tarndt/wasmws.git``
-2. Change to demo directory: ``cd ./wasmws/demo/server``
+2. Change to the demo directory: ``cd ./wasmws/demo/server``
 3. Build the client, server and run the server (which serves the client): ``./build.bash && ./server``
 4. Open [http://localhost:8080/](http://localhost:8080/) in your web browser
-5. Open the web console (Ctrl+Shift+K in Firefox, Ctrl+Shift+I in Chrome) and observe the output
+5. Open the web console (Ctrl+Shift+K in Firefox, Ctrl+Shift+I in Chrome) and observe the output!
 		
 ## Alternatives
 
-1. Use [gRPC-Web](https://github.com/grpc/grpc-web) as a HTTP to gRPC gateway/proxy. (If you don't want to running extra middleware..)
+1. Use [gRPC-Web](https://github.com/grpc/grpc-web) as a HTTP to gRPC gateway/proxy. (If you don't mind a TCP connection per request, running extra middleware which are also extra points of failure...)
 2. Use "[nhooyr.io/websocket](https://github.com/nhooyr/websocket)"'s implemtation which unlike "wasmws" does not use the browser provided websocket functionality. Test and bench your own use-case!
 		
 ## Future
@@ -83,3 +83,5 @@ wasmws is actively being maintained, but that does not mean there are not things
 ## Contributing
 
 [Issues](https://github.com/tarndt/wasmws/issues), and espcially issues with [pull requests](https://github.com/tarndt/wasmws/pulls) are welcome!
+
+This code is licensed under [MPL 2.0](https://en.wikipedia.org/wiki/Mozilla_Public_License).
