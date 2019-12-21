@@ -54,7 +54,7 @@ This implementation tries to be intelligent about managing buffers (via [pooling
 The test results above are from tests run on a local development workstation:
 
  * CPU: AMD Ryzen 9 3900X 12-Core Processor
- * OS: Ubuntu 18.04 LTS (Linux nautilus 4.15)
+ * OS: Ubuntu 18.04 LTS (Linux 4.15.X)
 
 ## Running the demo
 
