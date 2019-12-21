@@ -13,23 +13,23 @@ This library allows you to use a websocket as [net.Conn](https://golang.org/pkg/
 
 #### Client-side (Go WASM application running in browser)
 wasmws provides Go WASM specific [net.Conn](https://golang.org/pkg/net/#Conn) implementation that is backed by [a browser native websocket](https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API):
-```
+```go
 myConn, err := wasmws.Dial("websocket", "ws://demos.kaazing.com/echo")
 ```
-It is fairly straight forward to use this to set up a gRPC connection:
-```
+It is fairly straight forward to use this package to set up a gRPC connection:
+```go
 conn, err := grpc.DialContext(dialCtx, "passthrough:///"+websocketURL, grpc.WithContextDialer(wasmws.GRPCDialer), grpc.WithTransportCredentials(creds))
 ```
 See the [demo client](https://github.com/tarndt/wasmws/blob/master/demo/client/main.go) for an extended example.
 
 #### Server-side
 wasmws includes websocket [net.Listener](https://golang.org/pkg/net/#Listener) that provides a [HTTP handler method](https://golang.org/pkg/net/http/#HandlerFunc) to accept HTTP websocket connections...
-```
+```go
 wsl := wasmws.NewWebSocketListener(appCtx)
 router.HandleFunc("/grpc-proxy", wsl.HTTPAccept)
 ```
 And a network listener to provide net.Conns to network oriented servers:
-```
+```go
 err := grpcServer.Serve(wsl)
 ```
 See the [demo server](https://github.com/tarndt/wasmws/blob/master/demo/server/main.go) for an extended example. If you need more server-side helpers checkout [nhooyr.io/websocket](https://github.com/nhooyr/websocket) which these helpers use themselves.
