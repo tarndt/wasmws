@@ -23,24 +23,45 @@ var _ net.Listener = (*WebSockListener)(nil)
 
 func NewWebSocketListener(ctx context.Context) *WebSockListener {
 	ctx, cancel := context.WithCancel(ctx)
-	return &WebSockListener{
+	wsl := &WebSockListener{
 		ctx:       ctx,
 		ctxCancel: cancel,
 		acceptCh:  make(chan net.Conn, 8),
 	}
+	go func() { //Close queued connections
+		<-ctx.Done()
+		for {
+			select {
+			case conn := <-wsl.acceptCh:
+				conn.Close()
+				continue
+			default:
+			}
+			break
+		}
+	}()
+	return wsl
 }
 
 func (wsl *WebSockListener) HTTPAccept(wtr http.ResponseWriter, req *http.Request) {
+	select {
+	case <-wsl.ctx.Done():
+		http.Error(wtr, "503: Service is shutdown", http.StatusServiceUnavailable)
+		log.Printf("WebSockListener: WARN: A websocket listener's HTTP Accept was called when shutdown!")
+	}
+
 	ws, err := websocket.Accept(wtr, req, nil)
 	if err != nil {
-		log.Fatalf("Could not accept websocket from %q; Details: %s", req.RemoteAddr, err)
+		log.Printf("WebSockListener: ERROR: Could not accept websocket from %q; Details: %s", req.RemoteAddr, err)
 	}
 
 	conn := websocket.NetConn(wsl.ctx, ws, websocket.MessageBinary)
 	select {
 	case wsl.acceptCh <- conn:
+	case <-wsl.ctx.Done():
+		ws.Close(websocket.StatusBadGateway, fmt.Sprintf("Failed to accept connection before websocket listener shutdown; Details: %s", wsl.ctx.Err()))
 	case <-req.Context().Done():
-		ws.Close(websocket.StatusBadGateway, fmt.Sprintf("Failed to accept connection; Details: %s", req.Context().Err()))
+		ws.Close(websocket.StatusBadGateway, fmt.Sprintf("Failed to accept connection before websocket HTTP request cancelation; Details: %s", req.Context().Err()))
 	}
 }
 
