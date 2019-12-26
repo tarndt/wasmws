@@ -12,6 +12,8 @@ import (
 	"nhooyr.io/websocket"
 )
 
+//WebSockListener implements net.Listener and provides connections that are
+//incoming websocket connections
 type WebSockListener struct {
 	ctx       context.Context
 	ctxCancel context.CancelFunc
@@ -21,6 +23,8 @@ type WebSockListener struct {
 
 var _ net.Listener = (*WebSockListener)(nil)
 
+//NewWebSocketListener constructs a new WebSockListener, the provided context
+//is for the lifetime of the listener.
 func NewWebSocketListener(ctx context.Context) *WebSockListener {
 	ctx, cancel := context.WithCancel(ctx)
 	wsl := &WebSockListener{
@@ -43,6 +47,8 @@ func NewWebSocketListener(ctx context.Context) *WebSockListener {
 	return wsl
 }
 
+//HTTPAccept is a method that is mean to be used as http.HandlerFunc to accept inbound HTTP requests
+// that are websocket connections
 func (wsl *WebSockListener) HTTPAccept(wtr http.ResponseWriter, req *http.Request) {
 	select {
 	case <-wsl.ctx.Done():
@@ -67,6 +73,8 @@ func (wsl *WebSockListener) HTTPAccept(wtr http.ResponseWriter, req *http.Reques
 	}
 }
 
+//Accept fulfills the net.Listener interface and returns net.Conn that are incoming
+// websockets
 func (wsl *WebSockListener) Accept() (net.Conn, error) {
 	select {
 	case conn := <-wsl.acceptCh:
@@ -76,11 +84,13 @@ func (wsl *WebSockListener) Accept() (net.Conn, error) {
 	}
 }
 
+//Close closes the listener
 func (wsl *WebSockListener) Close() error {
 	wsl.ctxCancel()
 	return nil
 }
 
+//RemoteAddr returns a dummy websocket address to satisfy net.Listener
 func (wsl *WebSockListener) Addr() net.Addr {
 	return wsAddr{}
 }

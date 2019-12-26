@@ -23,24 +23,30 @@ var arrayReaderPool = sync.Pool{
 	},
 }
 
+//newReaderArrayPromise returns a arrayReader from a JavaScript promise for
+// an array buffer: See https://developer.mozilla.org/en-US/docs/Web/API/Blob/arrayBuffer
 func newReaderArrayPromise(arrayPromise js.Value) *arrayReader {
 	ar := arrayReaderPool.Get().(*arrayReader)
 	ar.jsPromise = arrayPromise
 	return ar
 }
 
+//newReaderArrayPromise returns a arrayReader from a JavaScript array buffer:
+// See: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer
 func newReaderArrayBuffer(arrayBuffer js.Value) (*arrayReader, int) {
 	ar := arrayReaderPool.Get().(*arrayReader)
 	ar.remaining, ar.read = ar.fromArray(arrayBuffer), true
 	return ar, len(ar.remaining)
 }
 
+//Close closes the arrayReader and returns it to a pool. DO NOT USE FURTHER!
 func (ar *arrayReader) Close() error {
 	ar.Reset()
 	arrayReaderPool.Put(ar)
 	return nil
 }
 
+//Reset makes this arrayReader ready for reuse
 func (ar *arrayReader) Reset() {
 	const bufMax = socketStreamThresholdBytes
 	ar.jsPromise, ar.read, ar.err = js.Value{}, false, nil
@@ -51,6 +57,7 @@ func (ar *arrayReader) Reset() {
 	}
 }
 
+//Read implements the standard io.Reader interface
 func (ar *arrayReader) Read(buf []byte) (n int, err error) {
 	if ar.err != nil {
 		return 0, ar.err
@@ -89,6 +96,8 @@ func (ar *arrayReader) Read(buf []byte) (n int, err error) {
 	return n, nil
 }
 
+//fromArray is a helper that that copies a JavaScript ArrayBuffer into go-space
+// and uses an existing go buffer if possible.
 func (ar *arrayReader) fromArray(arrayBuffer js.Value) []byte {
 	jsBuf := uint8Array.New(arrayBuffer)
 	count := jsBuf.Get("byteLength").Int()

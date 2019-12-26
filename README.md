@@ -1,6 +1,6 @@
-# wasmws: Webassembly Websocket (for Go)
+# wasmws: Web-Assembly Websocket (for Go)
 
-## What is wasms? Why would I want to use this?
+## What is wasmws? Why would I want to use this?
 
 [wasmws](https://github.com/tarndt/wasmws) was written primarily to allow [Go](https://golang.org/) applications targeting [WASM](https://en.wikipedia.org/wiki/WebAssembly) to communicate with a [gRPC](https://grpc.io/) server. This is normally challenging for two reasons: 
 
@@ -69,7 +69,7 @@ If you do not have Go installed, you will of course need to [install it](https:/
 ## Alternatives
 
 1. Use [gRPC-Web](https://github.com/grpc/grpc-web) as a HTTP to gRPC gateway/proxy. (If you don't mind a TCP connection per request, running extra middleware which are also extra points of failure...)
-2. Use "[nhooyr.io/websocket](https://github.com/nhooyr/websocket)"'s implemtation which unlike "wasmws" does not use the browser provided websocket functionality. Test and bench your own use-case!
+2. Use "[nhooyr.io/websocket](https://github.com/nhooyr/websocket)"'s implementation which unlike "wasmws" does not use the browser provided websocket functionality. Test and bench your own use-case!
 		
 ## Future
 
@@ -81,6 +81,6 @@ wasmws is actively being maintained, but that does not mean there are not things
 		
 ## Contributing
 
-[Issues](https://github.com/tarndt/wasmws/issues), and espcially issues with [pull requests](https://github.com/tarndt/wasmws/pulls) are welcome!
+[Issues](https://github.com/tarndt/wasmws/issues), and especially issues with [pull requests](https://github.com/tarndt/wasmws/pulls) are welcome!
 
 This code is licensed under [MPL 2.0](https://en.wikipedia.org/wiki/Mozilla_Public_License).
