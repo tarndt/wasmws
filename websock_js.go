@@ -23,6 +23,12 @@ var (
 )
 
 func init() {
+	newBlob := js.Global().Get("Blob")
+	if newBlob == jsUndefined {
+		blobSupported = false
+		return
+	}
+
 	testBlob := js.Global().Get("Blob").New()
 	blobSupported = testBlob.Get("arrayBuffer") != jsUndefined &&
 		testBlob.Get("stream") != js.Undefined()
@@ -370,6 +376,10 @@ func (ws *WebSocket) handleError(_ js.Value, args []js.Value) {
 }
 
 func (ws *WebSocket) handleMessage(_ js.Value, args []js.Value) {
+	if debugVerbose {
+		println("Websocket: New Message JS Callback")
+	}
+
 	var rdr io.Reader
 	var size int
 
@@ -394,7 +404,7 @@ func (ws *WebSocket) handleMessage(_ js.Value, args []js.Value) {
 		}
 
 	default:
-		panic(fmt.Sprintf("WebSocket: Unknown socket type: %d", ws.wsType))
+		panic(fmt.Sprintf("WebSocket: Unknown socket type: %s (%d)", ws.wsType, ws.wsType))
 	}
 
 	select {
