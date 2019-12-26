@@ -75,9 +75,8 @@ If you do not have Go installed, you will of course need to [install it](https:/
 
 wasmws is actively being maintained, but that does not mean there are not things to do:
 
-* [More code comments and godocs (WIP)](https://github.com/tarndt/wasmws/issues/1)
-* [Further optimization/profiling](https://github.com/tarndt/wasmws/issues/4)
 * [Testing on browsers besides Firefox and Chrome](https://github.com/tarndt/wasmws/issues/5)
+* [Further optimization/profiling](https://github.com/tarndt/wasmws/issues/4)
 		
 ## Contributing
 
