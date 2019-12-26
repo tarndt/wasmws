@@ -40,7 +40,7 @@ If you use a secure websocket and gRPC or HTTPS this means you get double TLS (o
 
 ## Performance
 
-Due to challenges around having the sever running as a native application and the client running in a browser coordinate, I have not yet added unit benches... or tests :( yet. However, running the demo which performs 8192 gRPC hello world calls provides an idea of the library's performance:
+Due to challenges around having the sever running as a native application and the client running in a browser coordinate, I have not yet added unit benches... :( yet. However, running the demo which performs 8192 gRPC hello world calls provides an idea of the library's performance:
 
 Median of 6 runs:
 
@@ -76,7 +76,6 @@ If you do not have Go installed, you will of course need to [install it](https:/
 wasmws is actively being maintained, but that does not mean there are not things to do:
 
 * [More code comments and godocs (WIP)](https://github.com/tarndt/wasmws/issues/1)
-* [Unit tests](https://github.com/tarndt/wasmws/issues/2)/[benches](https://github.com/tarndt/wasmws/issues/3) (manual testing so far due to difficulties of testing native app and WASM app together)
 * [Further optimization/profiling](https://github.com/tarndt/wasmws/issues/4)
 * [Testing on browsers besides Firefox and Chrome](https://github.com/tarndt/wasmws/issues/5)
 		
