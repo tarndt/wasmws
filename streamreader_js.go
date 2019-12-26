@@ -21,18 +21,22 @@ var streamReaderPool = sync.Pool{
 	},
 }
 
+//newStreamReaderPromise returns a streamReader from a JavaScript promise for
+// a stream reader: See https://developer.mozilla.org/en-US/docs/Web/API/Blob/stream
 func newStreamReaderPromise(streamPromise js.Value) *streamReader {
 	sr := streamReaderPool.Get().(*streamReader)
 	sr.jsPromise = streamPromise
 	return sr
 }
 
+//Close closes the streamReader and returns it to a pool. DO NOT USE FURTHER!
 func (sr *streamReader) Close() error {
 	sr.Reset()
 	streamReaderPool.Put(sr)
 	return nil
 }
 
+//Reset makes this streamReader ready for reuse
 func (sr *streamReader) Reset() {
 	const bufMax = socketStreamThresholdBytes
 	sr.jsPromise, sr.err = js.Value{}, nil
@@ -43,6 +47,7 @@ func (sr *streamReader) Reset() {
 	}
 }
 
+//Read implements the standard io.Reader interface
 func (sr *streamReader) Read(p []byte) (n int, err error) {
 	if sr.err != nil {
 		return 0, sr.err
