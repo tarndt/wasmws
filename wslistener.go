@@ -21,7 +21,10 @@ type WebSockListener struct {
 	acceptCh chan net.Conn
 }
 
-var _ net.Listener = (*WebSockListener)(nil)
+var (
+	_ net.Listener = (*WebSockListener)(nil)
+	_ http.Handler = (*WebSockListener)(nil)
+)
 
 //NewWebSocketListener constructs a new WebSockListener, the provided context
 //is for the lifetime of the listener.
@@ -47,9 +50,9 @@ func NewWebSocketListener(ctx context.Context) *WebSockListener {
 	return wsl
 }
 
-//HTTPAccept is a method that is mean to be used as http.HandlerFunc to accept inbound HTTP requests
+//ServeHTTP is a method that is mean to be used as http.HandlerFunc to accept inbound HTTP requests
 // that are websocket connections
-func (wsl *WebSockListener) HTTPAccept(wtr http.ResponseWriter, req *http.Request) {
+func (wsl *WebSockListener) ServeHTTP(wtr http.ResponseWriter, req *http.Request) {
 	select {
 	case <-wsl.ctx.Done():
 		http.Error(wtr, "503: Service is shutdown", http.StatusServiceUnavailable)
