@@ -32,7 +32,7 @@ func main() {
 	//Setup HTTP / Websocket server
 	router := http.NewServeMux()
 	wsl := wasmws.NewWebSocketListener(appCtx)
-	router.HandleFunc("/grpc-proxy", wsl.HTTPAccept)
+	router.HandleFunc("/grpc-proxy", wsl.ServeHTTP)
 	router.Handle("/", http.FileServer(http.Dir("./static")))
 	httpServer := &http.Server{Addr: ":8080", Handler: router}
 	//Run HTTP server
