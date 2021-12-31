@@ -10,6 +10,8 @@ import (
 	"time"
 )
 
+const echoServiceWebSockURL = "ws://echo.websocket.events"
+
 //These tests are intended to run in a headless chrome instance (see test.bash)
 // and access an external public websocket testing server.
 
@@ -18,7 +20,6 @@ func TestWebsocketEchoSmall(t *testing.T) {
 	testCtx, testCancel := context.WithTimeout(context.Background(), testTO)
 	defer testCancel()
 
-	const echoServiceWebSockURL = "ws://demos.kaazing.com/echo"
 	ws, err := New(testCtx, echoServiceWebSockURL)
 	if err != nil {
 		t.Fatalf("Could not construct test websocket against %q; Details: %s", echoServiceWebSockURL, err)
@@ -40,7 +41,6 @@ func TestWebsocketEchoLarge(t *testing.T) {
 	testCtx, testCancel := context.WithTimeout(context.Background(), testTO)
 	defer testCancel()
 
-	const echoServiceWebSockURL = "ws://demos.kaazing.com/echo"
 	ws, err := New(testCtx, echoServiceWebSockURL)
 	if err != nil {
 		t.Fatalf("Could not construct test websocket against %q; Details: %s", echoServiceWebSockURL, err)
