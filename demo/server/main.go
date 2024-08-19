@@ -18,7 +18,9 @@ import (
 
 //go:generate ./build.bash
 
-type helloServer struct{}
+type helloServer struct {
+	pb.UnimplementedGreeterServer
+}
 
 func (*helloServer) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloReply, error) {
 	return &pb.HelloReply{Message: "Hello " + in.GetName()}, nil
