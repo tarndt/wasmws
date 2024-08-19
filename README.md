@@ -32,7 +32,7 @@ And a network listener to provide net.Conns to network oriented servers:
 ```go
 err := grpcServer.Serve(wsl)
 ```
-See the [demo server](https://github.com/tarndt/wasmws/blob/master/demo/server/main.go) for an extended example. If you need more server-side helpers checkout [nhooyr.io/websocket](https://github.com/nhooyr/websocket) which these helpers use themselves.
+See the [demo server](https://github.com/tarndt/wasmws/blob/master/demo/server/main.go) for an extended example. If you need more server-side helpers checkout [github.com/coder/websocket](https://github.com/coder/websocket) which these helpers use themselves.
 
 #### Security
 
@@ -69,7 +69,7 @@ If you do not have Go installed, you will of course need to [install it](https:/
 ## Alternatives
 
 1. Use [gRPC-Web](https://github.com/grpc/grpc-web) as a HTTP to gRPC gateway/proxy. (If you don't mind a TCP connection per request, running extra middleware which are also extra points of failure...)
-2. Use "[nhooyr.io/websocket](https://github.com/nhooyr/websocket)"'s implementation which unlike "wasmws" does not use the browser provided websocket functionality. Test and bench your own use-case!
+2. Use "[github.com/coder/websocket](https:/github.com/coder/websocket)"'s implementation which unlike "wasmws" does not use the browser provided websocket functionality. Test and bench your own use-case!
 		
 ## Future
 

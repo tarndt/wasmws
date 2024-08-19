@@ -9,7 +9,7 @@ import (
 	"net"
 	"net/http"
 
-	"nhooyr.io/websocket"
+	"github.com/coder/websocket"
 )
 
 //WebSockListener implements net.Listener and provides connections that are
